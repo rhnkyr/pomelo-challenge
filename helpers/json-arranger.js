@@ -17,10 +17,13 @@ exports.JsonArranger = (payload) => {
     //Filter object by conditions
     const nested = obj.filter((element, idx, array) => {
 
+        //determine sub objects
         const parent = array.find(e => e.id === element.parent_id);
 
+        //if undefined then it is a parent
         if (!parent) return true;
 
+        //otherwise push to parent's children array
         (parent.children = parent.children || []).push(element);
 
     });
