@@ -5,8 +5,6 @@ const { expect } = require('@hapi/code');
 const { afterEach, beforeEach, describe, it } = exports.lab = Lab.script();
 const { init } = require('../lib/server');
 
-const { GetGithubRepositoriesByRepositoryKeyword } = require('../helpers/github-repositories')
-
 describe('GET /', () => {
     let server;
 
@@ -19,10 +17,7 @@ describe('GET /', () => {
     });
 
     it('responds with 200', async () => {
-        const res = await server.inject({
-            method: 'get',
-            url: '/'
-        });
+        const res = await server.inject('/');
         expect(res.statusCode).to.equal(200);
     });
 
@@ -31,24 +26,25 @@ describe('GET /', () => {
         expect(res.result).to.contain('NodeJs Repos');
     });
 
-    it('has prev link if page = 1', async () => {
+    it('has not prev and first links if page = 1', async () => {
         const res = await server.inject('/');
         expect(res.result).to.not.contain('prev');
+        expect(res.result).to.not.contain('first');
     });
 
-    it('has prev link if page > 1', async () => {
+    it('has prev and last links if page > 1', async () => {
         const res = await server.inject('/?page=2');
         expect(res.result).to.contain('prev');
+        expect(res.result).to.contain('last');
     });
 
-    it('has prev link if page > 100', async () => {
+    it('has no result if page > 100', async () => {
         const res = await server.inject('/?page=101');
         expect(res.result).to.contain('There is no result...');
     });
 
     it('has table rows', async () => {
         const res = await server.inject('/');
-
         expect(res.result).to.not.contain('There is no result...');
     });
 });

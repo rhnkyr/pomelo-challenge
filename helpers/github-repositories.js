@@ -1,11 +1,11 @@
 const axios = require('axios').default
 
-exports.GetGithubRepositoriesByRepositoryKeyword = async (page, keyword) => {
+exports.GetGithubRepositoriesByKeyword = async (keyword, page) => {
     let links = {}, data = {}, total_count
     const per_page = 10
 
     try {
-        const response = await axios.get(`https://api.github.com/search/repositories?q=${keyword}&per_page=${per_page}&page=${page || 1}`,
+        const response = await axios.get(`https://api.github.com/search/repositories?q=${keyword}&per_page=${per_page}&page=${page}`,
             {
                 headers: {
                     'Authorization': 'token 6050f83ef16dacffaddbf14f5d01e34d3ab3d8d7'

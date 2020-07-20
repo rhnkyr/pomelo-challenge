@@ -4,7 +4,7 @@ const Hapi = require('@hapi/hapi');
 const Vision = require('@hapi/vision');
 
 const { JsonArranger } = require('./helpers/json-arranger')
-const { GetGithubRepositoriesByRepositoryKeyword } = require('./helpers/github-repositories')
+const { GetGithubRepositoriesByKeyword } = require('./helpers/github-repositories')
 
 const init = async () => {
 
@@ -41,10 +41,7 @@ const init = async () => {
         path: '/',
         handler: async (request, h) => {
 
-            const { data, links, total_count } =
-                await GetGithubRepositoriesByRepositoryKeyword(request.query.page, 'nodejs')
-
-            return h.view('index', { data, total_count, links });
+            return h.view('index', await GetGithubRepositoriesByKeyword('nodejs', request.query.page || 1));
 
         }
     });
